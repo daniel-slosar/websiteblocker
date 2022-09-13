@@ -6,6 +6,21 @@ import requests
 
 ip_add = "127.0.0.1"
 
+def check(window,site):
+    site=ip_add+"\t"+site
+    with open('hosts.txt', 'r') as file:
+        # read all content of a file
+        content = file.read()
+        # check if string present in a file
+        if site in content:
+            print(site)
+            window['-UNBLOCK-'].update("Unblock", visible=True)
+        elif site not in content:
+            print(site)
+            window['-BLOCK-'].update("Block", visible=True)
+        else:
+            sg.popup_error("Error!")
+
 def display_hosts():
     try:
         hosts = open('hosts.txt','r') #should be a path to hosts file
@@ -31,10 +46,19 @@ def main_window():
 
     while True:
         event, values = window.read()
+        window['-UNBLOCK-'].update("Unblock", visible=False)
+        window['-BLOCK-'].update("Block", visible=False)
         print(values)
         if event in (sg.WINDOW_CLOSED, "Exit"):
             break
-    
+        if event=="Check website":
+            check(window,site=values['-INPUT-'])
+        if event=="-BLOCK-":
+            sg.popup_ok("Website sucessfully blocked!")
+        if event=="-UNBLOCK-":
+            sg.popup_ok("Website sucessfully unblocked!")
+        if event == "Display file":
+            display_hosts()
     window.close()
 
 if __name__ == "__main__":
