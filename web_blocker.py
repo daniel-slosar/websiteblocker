@@ -1,16 +1,13 @@
 import PySimpleGUI as sg
 import requests
 
-
-#hosts_file = "C:\Windows\System32\drivers\etc\hosts"
-hosts = "D:\Python\WebsiteBlocker\hosts.txt"
- 
+hosts_file = "C:\Windows\System32\drivers\etc\hosts"
 ip_add = "127.0.0.1"
 
 def check(window,site):
     global hosts
     site=ip_add+"\t"+site
-    with open(hosts, 'r') as file:
+    with open(hosts_file, 'r') as file:
         # read all content of a file
         content = file.read()
         # check if string present in a file
@@ -25,7 +22,7 @@ def check(window,site):
 
 def block(site):
     global hosts
-    f = open(hosts, 'a')
+    f = open(hosts_file, 'a')
     f.write("\n"+ip_add+"\t"+site+"\t#Blocked website (Delete this if you want to unblock)\n")
     f.close()
 
@@ -34,10 +31,10 @@ def unblock(site):
     global hosts
     link=ip_add+"\t"+site+"\t#Blocked website (Delete this if you want to unblock)"
     print(link)
-    with open(hosts, "r") as fp:
+    with open(hosts_file, "r") as fp:
         lines = fp.readlines()
 
-    with open(hosts, "w") as fp:
+    with open(hosts_file, "w") as fp:
         for line in lines:
             if line.strip("\n") != link:
                 fp.write(line)
@@ -46,7 +43,7 @@ def unblock(site):
 def display_hosts():
     try:
         global hosts
-        hosts = open(hosts,'r') #should be a path to hosts file
+        hosts = open(hosts_file,'r') #should be a path to hosts file
         txt = hosts.read()
         sg.popup_scrolled(txt)
         
