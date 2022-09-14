@@ -75,7 +75,15 @@ def main_window():
         if event in (sg.WINDOW_CLOSED, "Exit"):
             break
         if event=="Check website":
-            check(window,site=values['-INPUT-'])
+            if values['-INPUT-'] == "":
+                pass
+            else:
+                try:
+                    response = requests.get('http://'+values['-INPUT-'])
+                    if response.status_code == 200:
+                        check(window,site=values['-INPUT-'])
+                except:
+                    sg.popup_error("Website doesn't exist!")
         if event=="-BLOCK-":
             block(site=values['-INPUT-'])
             sg.popup_ok("Website sucessfully blocked!")
